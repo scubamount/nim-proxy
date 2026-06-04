@@ -16,7 +16,8 @@ app = FastAPI(name="nim-proxy")
 
 def _apply_override(body: dict) -> dict:
     model = (body.get("model") or "").strip()
-    override = load_overrides().get(model)
+    overrides = load_overrides()
+    override = overrides.get(model)
     if not override:
         return body
 

@@ -76,8 +76,8 @@ In your `opencode.json`, add the nvidia provider block:
     "apiKey": "{env:NVIDIA_API_KEY}"
   },
   "models": {
-    "nvidia/nemotron-3-ultra-550b-a55b": { "name": "Nemotron 3 Ultra 500b A55B" },
-    "nvidia/stepfun-ai/step-3.7-flash": { "name": "Step 3.7 Flash" }
+      "nvidia/nemotron-3-ultra-550b-a55b": { "name": "Nemotron 3 Ultra 500b A55B" },
+      "stepfun-ai/step-3.7-flash": { "name": "Step 3.7 Flash" }
   }
 }
 ```
