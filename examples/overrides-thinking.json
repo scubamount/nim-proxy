@@ -1,0 +1,25 @@
+{
+  "_comment": "Testing toggle. Same as built-in but with Nemotron's enable_thinking=true to test reasoning output quality. If garbled, switch back to false. Use: NIM_PROXY_OVERRIDES=examples/overrides-thinking.json ./scripts/restart.sh",
+  "nvidia/nemotron-3-ultra-550b-a55b": {
+    "upstream": "nvidia/nemotron-3-ultra-550b-a55b",
+    "temperature": 1,
+    "top_p": 0.95,
+    "max_tokens": 16384,
+    "extra_body": {
+      "chat_template_kwargs": {"enable_thinking": true}
+    }
+  },
+  "stepfun-ai/step-3.7-flash": {
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "max_tokens": 16384
+  },
+  "deepseek-ai/deepseek-v4-pro": {
+    "temperature": 1,
+    "top_p": 0.95,
+    "max_tokens": 16384,
+    "extra_body": {
+      "chat_template_kwargs": {"thinking": false}
+    }
+  }
+}

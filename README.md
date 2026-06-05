@@ -51,6 +51,32 @@ Same shape either way. See `examples/overrides.json` for the full schema.
 | `max_tokens`   | `int`     | Max response tokens                      |
 | `extra_body`   | `object`  | Passed through to NIM (e.g. `chat_template_kwargs`, `reasoning_budget`) |
 
+### Reasoning / thinking toggle
+
+Some NIM models support explicit reasoning via `chat_template_kwargs`:
+
+| Model                          | Toggle key                | Default |
+|--------------------------------|---------------------------|---------|
+| `nvidia/nemotron-3-ultra-550b-a55b` | `chat_template_kwargs.enable_thinking` | `false` (cleaner output) |
+| `deepseek-ai/deepseek-v4-pro`  | `chat_template_kwargs.thinking`        | `false` (NIM card recommendation) |
+
+To test a different reasoning mode without changing source:
+
+```bash
+# Copy the test config and point the proxy at it
+cp examples/overrides.json /tmp/my-overrides.json
+$EDITOR /tmp/my-overrides.json   # flip the flag
+NIM_PROXY_OVERRIDES=/tmp/my-overrides.json python3.12 -m uvicorn nim_proxy.app:app --port 8002
+```
+
+Or use the bundled thinking-test preset:
+
+```bash
+NIM_PROXY_OVERRIDES=examples/overrides-thinking.json python3.12 -m uvicorn nim_proxy.app:app --port 8002
+```
+
+**Note on opencode side:** keep `reasoning: false` in opencode model blocks. NIM reasoning models don't emit a separate `reasoning_content` field — they mix reasoning into `content`. Setting `reasoning: true` in opencode makes it try to parse non-existent reasoning tokens and breaks the stream. The proxy is the right place to flip reasoning.
+
 If your request includes `max_tokens` and the override includes `max_tokens`, the larger of the two wins.
 
 ## Use with any OpenAI-compatible client
