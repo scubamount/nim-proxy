@@ -47,6 +47,32 @@ async def catch_all(
         upstream_path = path[3:]
     else:
         upstream_path = path
+
+    if upstream_path == "api/show":
+        try:
+            payload = await request.json()
+        except Exception:
+            payload = {}
+        model_name = (payload.get("name") or "").strip()
+        overrides = load_overrides()
+        if model_name in overrides:
+            return Response(
+                content=json.dumps(
+                    {
+                        "name": model_name,
+                        "model_info": {
+                            "general.architecture": model_name.split("/")[-1],
+                        },
+                    }
+                ),
+                media_type="application/json",
+            )
+        return Response(
+            content=json.dumps({"error": f"unknown model: {model_name}"}),
+            status_code=404,
+            media_type="application/json",
+        )
+
     url = f"{NIM_BASE}/{upstream_path}"
 
     auth = request.headers.get("authorization") or (
