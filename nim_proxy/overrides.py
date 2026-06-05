@@ -50,4 +50,16 @@ MODEL_OVERRIDES: dict = {
         "top_p": 0.95,
         "max_tokens": 8192,
     },
+    "moonshotai/kimi-k2.6": {
+        "upstream": "moonshotai/kimi-k2.6",
+        "temperature": 1.0,
+        "top_p": 1.0,
+        "max_tokens": 16384,
+    },
+    "nvidia/moonshotai/kimi-k2.6": {
+        "upstream": "moonshotai/kimi-k2.6",
+        "temperature": 1.0,
+        "top_p": 1.0,
+        "max_tokens": 16384,
+    },
 }
