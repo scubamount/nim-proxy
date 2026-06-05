@@ -118,9 +118,16 @@ async def catch_all(
 
     status, err_body, resp_headers = await _peek()
     if status != 200:
+        out_headers = {}
+        for k, v in resp_headers.items():
+            if k.lower() in ("content-type", "content-length"):
+                out_headers[k] = v
+        if status == 429 and "retry-after" not in {h.lower() for h in resp_headers}:
+            out_headers["Retry-After"] = "60"
         return Response(
             content=err_body,
             status_code=status,
+            headers=out_headers,
             media_type=resp_headers.get("content-type", "application/json"),
         )
 
