@@ -1,0 +1,77 @@
+{
+  ".opencode/opencode.json": {
+    "mtime": 1780605792.6045957,
+    "ast_hash": "abcc8b9dcd80bca5f9dde6d9f0c3ae79",
+    "semantic_hash": "abcc8b9dcd80bca5f9dde6d9f0c3ae79"
+  },
+  ".opencode/plugins/graphify.js": {
+    "mtime": 1780605807.431264,
+    "ast_hash": "64ccd3c03dbfe0980b6095766f5c4e52",
+    "semantic_hash": "64ccd3c03dbfe0980b6095766f5c4e52"
+  },
+  "examples/overrides.json": {
+    "mtime": 1780604913.003406,
+    "ast_hash": "3051c42754bac29194b1973ebde96abe",
+    "semantic_hash": "3051c42754bac29194b1973ebde96abe"
+  },
+  "nim_proxy/__init__.py": {
+    "mtime": 1780604726.5356493,
+    "ast_hash": "0f561eab699eaa13e13c5d530eb50f7f",
+    "semantic_hash": "0f561eab699eaa13e13c5d530eb50f7f"
+  },
+  "nim_proxy/__main__.py": {
+    "mtime": 1780604748.1450167,
+    "ast_hash": "737fc0d2bc70ce06007edad5c05ba6ed",
+    "semantic_hash": "737fc0d2bc70ce06007edad5c05ba6ed"
+  },
+  "nim_proxy/app.py": {
+    "mtime": 1780605488.6222548,
+    "ast_hash": "50eb77a3f3b41a9970a76afca11c46dd",
+    "semantic_hash": "50eb77a3f3b41a9970a76afca11c46dd"
+  },
+  "nim_proxy/config.py": {
+    "mtime": 1780604732.1817775,
+    "ast_hash": "9d3b1ade05be9bb7d1c726d19838a77f",
+    "semantic_hash": "9d3b1ade05be9bb7d1c726d19838a77f"
+  },
+  "nim_proxy/overrides.py": {
+    "mtime": 1780605488.622403,
+    "ast_hash": "aba689b1966bb4d27f6d6e800d2c806f",
+    "semantic_hash": "aba689b1966bb4d27f6d6e800d2c806f"
+  },
+  "scripts/autolaunch.sh": {
+    "mtime": 1780604645.8527856,
+    "ast_hash": "5729fd78feb9b52af4f42afb9368265c",
+    "semantic_hash": "5729fd78feb9b52af4f42afb9368265c"
+  },
+  "scripts/install.sh": {
+    "mtime": 1780604639.342401,
+    "ast_hash": "3e22cea4b000731ff007fef57e79c30f",
+    "semantic_hash": "3e22cea4b000731ff007fef57e79c30f"
+  },
+  "scripts/restart.sh": {
+    "mtime": 1780604631.2757812,
+    "ast_hash": "0527c7eff849ac97e22cdac4e96522e2",
+    "semantic_hash": "0527c7eff849ac97e22cdac4e96522e2"
+  },
+  "scripts/update.sh": {
+    "mtime": 1780604652.317283,
+    "ast_hash": "ace2c795881e648784ae419623804106",
+    "semantic_hash": "ace2c795881e648784ae419623804106"
+  },
+  "tests/test_overrides.py": {
+    "mtime": 1780604783.0050268,
+    "ast_hash": "c5ccded90e8e9bd32ebad9062d192e42",
+    "semantic_hash": "c5ccded90e8e9bd32ebad9062d192e42"
+  },
+  "AGENTS.md": {
+    "mtime": 1780605795.6739838,
+    "ast_hash": "62c05a2bf20bf036a0b2633478663e64",
+    "semantic_hash": "62c05a2bf20bf036a0b2633478663e64"
+  },
+  "README.md": {
+    "mtime": 1780605065.829131,
+    "ast_hash": "7644d9ca785bc20c53941a298f2a0f49",
+    "semantic_hash": "7644d9ca785bc20c53941a298f2a0f49"
+  }
+}

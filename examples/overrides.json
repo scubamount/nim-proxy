@@ -4,13 +4,28 @@
     "top_p": 0.95,
     "max_tokens": 16384,
     "extra_body": {
-      "chat_template_kwargs": {"enable_thinking": true},
-      "reasoning_budget": 16384
+      "chat_template_kwargs": {"enable_thinking": false}
     }
   },
-    "stepfun-ai/step-3.7-flash": {
+  "stepfun-ai/step-3.7-flash": {
     "temperature": 1.0,
     "top_p": 0.95,
     "max_tokens": 16384
+  },
+  "deepseek-ai/deepseek-v4-pro": {
+    "temperature": 1,
+    "top_p": 0.95,
+    "max_tokens": 16384,
+    "extra_body": {
+      "chat_template_kwargs": {"thinking": false}
+    }
+  },
+  "deepseek-ai/deepseek-v4-flash": {
+    "temperature": 1,
+    "top_p": 0.95,
+    "max_tokens": 16384,
+    "extra_body": {
+      "chat_template_kwargs": {"enable_thinking": true}
+    }
   }
 }

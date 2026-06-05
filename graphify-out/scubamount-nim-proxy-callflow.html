@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>scubamount-nim-proxy — Complete Call Flow &amp; Architecture Documentation</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+:root {
+  --bg: #0f172a; --surface: #1e293b; --border: #334155;
+  --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+  --warn: #fbbf24; --err: #f87171; --ok: #34d399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+h1 { font-size: 2.4rem; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+h2 { font-size: 1.7rem; margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+h3 { font-size: 1.25rem; margin: 32px 0 12px; color: var(--accent); }
+h4 { font-size: 1.05rem; margin: 20px 0 8px; color: var(--warn); }
+p { margin: 8px 0; color: var(--muted); }
+.subtitle { color: var(--muted); font-size: 1.1rem; margin-bottom: 32px; }
+.mermaid { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto; position: relative; }
+.mermaid.is-enhanced { padding: 0; overflow: hidden; min-height: 260px; }
+.mermaid-viewport { padding: 54px 24px 24px; overflow: hidden; cursor: grab; touch-action: none; min-height: 260px; }
+.mermaid-viewport.is-dragging { cursor: grabbing; }
+.mermaid-viewport svg { max-width: none !important; height: auto; transform-origin: 0 0; transition: transform 120ms ease; }
+.mermaid-toolbar { position: absolute; top: 10px; right: 10px; z-index: 3; display: flex; align-items: center; gap: 6px; padding: 6px; background: rgba(15,23,42,0.92); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.28); }
+.mermaid-toolbar button, .mermaid-toolbar .zoom-level { height: 28px; min-width: 32px; border: 1px solid var(--border); border-radius: 6px; background: #1e293b; color: var(--text); font: 600 0.78rem system-ui, sans-serif; display: inline-flex; align-items: center; justify-content: center; }
+.mermaid-toolbar button { cursor: pointer; }
+.mermaid-toolbar button:hover { border-color: var(--accent); color: var(--accent); }
+.mermaid-toolbar .zoom-level { min-width: 52px; color: var(--muted); background: transparent; }
+.call-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.92rem; }
+.call-table th { background: #1a2744; color: var(--accent); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+.call-table td { padding: 8px 14px; border: 1px solid var(--border); vertical-align: top; }
+.call-table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+.tag-async { background: #7c3aed33; color: #a78bfa; }
+.tag-class { background: #05966933; color: var(--ok); }
+.tag-func { background: #2563eb33; color: var(--accent); }
+.tag-cmd { background: #d9770633; color: var(--warn); }
+.tag-endpoint { background: #dc262633; color: var(--err); }
+.tag-hook { background: #db277733; color: #f472b6; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 16px 0; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin: 16px 0; }
+.arrow-chain { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--accent); padding: 10px; background: rgba(56,189,248,0.06); border-radius: 6px; }
+code { font-family: 'Fira Code', 'Cascadia Code', monospace; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 3px; font-size: 0.88em; }
+ul, ol { margin: 8px 0 8px 24px; color: var(--muted); }
+li { margin: 4px 0; }
+a { color: var(--accent); }
+hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+.nav { position: sticky; top: 0; background: var(--bg); z-index: 10; padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.9rem; }
+.nav a { text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+@media (max-width: 768px) { .container { padding: 16px; } h1 { font-size: 1.8rem; } }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>scubamount-nim-proxy — Complete Call Flow &amp; Architecture Documentation</h1>
+<p class="subtitle">Generated from graphify knowledge graph: 78 nodes, 82 edges, 18 communities. Commit: 7d62f0a</p>
+
+<div class="nav">
+    <a href="#overview">Architecture Overview</a>
+    <a href="#build-graph">Graph Build</a>
+    <a href="#cli-skills">CLI &amp; Skill Installers</a>
+    <a href="#ingest-cache-update">Ingestion &amp; Updates</a>
+    <a href="#tests-fixtures">Tests &amp; Fixtures</a>
+    <a href="#community-3">Community 3</a>
+    <a href="#community-17">Community 17</a>
+    <a href="#community-5">Community 5</a>
+    <a href="#community-9">Community 9</a>
+    <a href="#community-12">Community 12</a>
+    <a href="#community-13">Community 13</a>
+    <a href="#community-15">Community 15</a>
+</div>
+
+<!-- ====== Architecture Overview ====== -->
+<h2 id="overview">1. Architecture Overview</h2>
+
+<div class="mermaid">
+
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    BUILD_GRAPH_321CBB04("Graph Build<br/><small>15 nodes</small>")
+    class BUILD_GRAPH_321CBB04 module;
+    CLI_SKILLS_9964CBB8("CLI &amp; Skill Installers<br/><small>23 nodes</small>")
+    class CLI_SKILLS_9964CBB8 module;
+    INGEST_CACHE_UPDATE_FF457338("Ingestion &amp; Updates<br/><small>2 nodes</small>")
+    class INGEST_CACHE_UPDATE_FF457338 module;
+    TESTS_FIXTURES_B84B1DCC("Tests &amp; Fixtures<br/><small>25 nodes</small>")
+    class TESTS_FIXTURES_B84B1DCC module;
+    COMMUNITY_3_D8DFCEA7("Community 3<br/><small>4 nodes</small>")
+    class COMMUNITY_3_D8DFCEA7 module;
+    COMMUNITY_17_648F8D7C("Community 17<br/><small>2 nodes</small>")
+    class COMMUNITY_17_648F8D7C module;
+    COMMUNITY_5_2966028D("Community 5<br/><small>2 nodes</small>")
+    class COMMUNITY_5_2966028D module;
+    COMMUNITY_9_1D55D1EE("Community 9<br/><small>2 nodes</small>")
+    class COMMUNITY_9_1D55D1EE module;
+    COMMUNITY_12_82F13F05("Community 12<br/><small>1 nodes</small>")
+    class COMMUNITY_12_82F13F05 module;
+    COMMUNITY_13_E329587C("Community 13<br/><small>1 nodes</small>")
+    class COMMUNITY_13_E329587C module;
+    COMMUNITY_15_4BECAAD7("Community 15<br/><small>1 nodes</small>")
+    class COMMUNITY_15_4BECAAD7 module;
+    TESTS_FIXTURES_B84B1DCC -->|contains x2| COMMUNITY_3_D8DFCEA7
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h4>Architecture Layers</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>Layer</th><th>Nodes</th><th>Communities</th></tr>
+      <tr><td>Graph Build</td><td>15</td><td><code>2, 11, 14</code></td></tr><tr><td>CLI &amp; Skill Installers</td><td>23</td><td><code>16, 4, 6, 7, 8</code></td></tr><tr><td>Ingestion &amp; Updates</td><td>2</td><td><code>10</code></td></tr><tr><td>Tests &amp; Fixtures</td><td>25</td><td><code>1, 0</code></td></tr><tr><td>Community 3</td><td>4</td><td><code>3</code></td></tr><tr><td>Community 17</td><td>2</td><td><code>17</code></td></tr><tr><td>Community 5</td><td>2</td><td><code>5</code></td></tr><tr><td>Community 9</td><td>2</td><td><code>9</code></td></tr><tr><td>Community 12</td><td>1</td><td><code>12</code></td></tr><tr><td>Community 13</td><td>1</td><td><code>13</code></td></tr><tr><td>Community 15</td><td>1</td><td><code>15</code></td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Core Flow</h4>
+    <div class="arrow-chain">Graph Build -&gt; CLI &amp; Skill Installers -&gt; Ingestion &amp; Updates -&gt; Tests &amp; Fixtures -&gt; Community 3 -&gt; Community 17 -&gt; Community 5</div>
+  </div>
+</div>
+<div class="grid">
+  <div class="card">
+    <h4>Graph Report Highlights</h4>
+    <ul>
+      <li>78 nodes · 82 edges · 18 communities (8 shown, 10 thin omitted)</li>
+      <li>Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS</li>
+      <li>Token cost: 0 input · 0 output</li>
+      <li>1. `scubamount-nim-proxy` - 11 edges</li>
+      <li>2. `nvidia/nemotron-3-ultra-550b-a55b` - 8 edges</li>
+      <li>3. `_capture_post()` - 7 edges</li>
+    </ul>
+  </div>
+</div>
+<hr>
+<!-- ====== 2. Graph Build ====== -->
+<h2 id="build-graph">2. Graph Build</h2>
+<p>Graph Build groups implementation around overridesjson, examples, temperature, top, mostly in examples/overrides.json, nim_proxy/GRAPH_REPORT.md, examples/opencode.json.snippet. This section covers 15 nodes and 15 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Graph Build (15 nodes, 15 edges)
+    subgraph build_graph_examples_overrides_json_eff1bec4["examples/overrides.json"]
+        examples_overrides_nvidia_nemotron_3_ultra_550b_9cecdaa3("nvidia/nemotron-3-ultra-550b-a55b<br/><small>examples/overrides.json</small>")
+        examples_overrides_stepfun_ai_step_3_7_flash_b3ff98bc("stepfun-ai/step-3.7-flash<br/><small>examples/overrides.json</small>")
+        examples_overrides_033edc24("overrides.json")
+        examples_overrides_nvidia_nemotron_3_ultra_550b_caba539f("extra_body<br/><small>examples/overrides.json</small>")
+        examples_overrides_extra_body_chat_template_kwar_ad00609d("chat_template_kwargs<br/><small>examples/overrides.json</small>")
+        examples_overrides_nvidia_nemotron_3_ultra_550b_0e9f2681("max_tokens<br/><small>examples/overrides.json</small>")
+        examples_overrides_nvidia_nemotron_3_ultra_550b_f9ca61e7("temperature<br/><small>examples/overrides.json</small>")
+        examples_overrides_nvidia_nemotron_3_ultra_550b_f3e93d3c("top_p<br/><small>examples/overrides.json</small>")
+        examples_overrides_stepfun_ai_step_3_7_flash_max_3ab10d83("max_tokens<br/><small>examples/overrides.json</small>")
+        examples_overrides_stepfun_ai_step_3_7_flash_tem_5d14cc5b("temperature<br/><small>examples/overrides.json</small>")
+        examples_overrides_stepfun_ai_step_3_7_flash_top_b0c9431a("top_p<br/><small>examples/overrides.json</small>")
+        examples_overrides_extra_body_reasoning_budget_d84ab8ca("reasoning_budget<br/><small>examples/overrides.json</small>")
+        examples_overrides_chat_template_kwargs_enable_t_791fd2e3("enable_thinking<br/><small>examples/overrides.json</small>")
+    end
+    opencode_json_d7905e19("OpenCode JSON<br/><small>examples/opencode.json.snippet</small>")
+    graph_report_md_4190a470("GRAPH_REPORT.md")
+    examples_overrides_033edc24 -->|contains| examples_overrides_nvidia_nemotron_3_ultra_550b_9cecdaa3
+    examples_overrides_033edc24 -->|contains| examples_overrides_stepfun_ai_step_3_7_flash_b3ff98bc
+    examples_overrides_nvidia_nemotron_3_ultra_550b_9cecdaa3 -->|contains| examples_overrides_nvidia_nemotron_3_ultra_550b_caba539f
+    examples_overrides_nvidia_nemotron_3_ultra_550b_9cecdaa3 -->|contains| examples_overrides_nvidia_nemotron_3_ultra_550b_0e9f2681
+    examples_overrides_nvidia_nemotron_3_ultra_550b_9cecdaa3 -->|contains| examples_overrides_nvidia_nemotron_3_ultra_550b_f9ca61e7
+    examples_overrides_nvidia_nemotron_3_ultra_550b_9cecdaa3 -->|contains| examples_overrides_nvidia_nemotron_3_ultra_550b_f3e93d3c
+    examples_overrides_nvidia_nemotron_3_ultra_550b_9cecdaa3 -->|contains| examples_overrides_stepfun_ai_step_3_7_flash_max_3ab10d83
+    examples_overrides_nvidia_nemotron_3_ultra_550b_9cecdaa3 -->|contains| examples_overrides_stepfun_ai_step_3_7_flash_tem_5d14cc5b
+    examples_overrides_nvidia_nemotron_3_ultra_550b_9cecdaa3 -->|contains| examples_overrides_stepfun_ai_step_3_7_flash_top_b0c9431a
+    examples_overrides_nvidia_nemotron_3_ultra_550b_caba539f -->|contains| examples_overrides_extra_body_chat_template_kwar_ad00609d
+    examples_overrides_nvidia_nemotron_3_ultra_550b_caba539f -->|contains| examples_overrides_extra_body_reasoning_budget_d84ab8ca
+    examples_overrides_extra_body_chat_template_kwar_ad00609d -->|contains| examples_overrides_chat_template_kwargs_enable_t_791fd2e3
+    examples_overrides_stepfun_ai_step_3_7_flash_b3ff98bc -->|contains| examples_overrides_stepfun_ai_step_3_7_flash_max_3ab10d83
+    examples_overrides_stepfun_ai_step_3_7_flash_b3ff98bc -->|contains| examples_overrides_stepfun_ai_step_3_7_flash_tem_5d14cc5b
+    examples_overrides_stepfun_ai_step_3_7_flash_b3ff98bc -->|contains| examples_overrides_stepfun_ai_step_3_7_flash_top_b0c9431a
+    class examples_overrides_nvidia_nemotron_3_ultra_550b_9cecdaa3 function;
+    class examples_overrides_stepfun_ai_step_3_7_flash_b3ff98bc function;
+    class examples_overrides_033edc24 function;
+    class examples_overrides_nvidia_nemotron_3_ultra_550b_caba539f function;
+    class examples_overrides_extra_body_chat_template_kwar_ad00609d function;
+    class examples_overrides_nvidia_nemotron_3_ultra_550b_0e9f2681 function;
+    class examples_overrides_nvidia_nemotron_3_ultra_550b_f9ca61e7 function;
+    class examples_overrides_nvidia_nemotron_3_ultra_550b_f3e93d3c function;
+    class examples_overrides_stepfun_ai_step_3_7_flash_max_3ab10d83 function;
+    class examples_overrides_stepfun_ai_step_3_7_flash_tem_5d14cc5b function;
+    class examples_overrides_stepfun_ai_step_3_7_flash_top_b0c9431a function;
+    class examples_overrides_extra_body_reasoning_budget_d84ab8ca function;
+    class examples_overrides_chat_template_kwargs_enable_t_791fd2e3 function;
+    class opencode_json_d7905e19 concept;
+    class graph_report_md_4190a470 concept;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>overrides.json</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>overrides.json node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>nvidia/nemotron-3-ultra-550b-a55b</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>nvidia/nemotron-3-ultra-550b-a55b node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>temperature</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>temperature node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>top_p</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>top_p node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>max_tokens</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>max_tokens node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>extra_body</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>extra_body node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>chat_template_kwargs</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Supports retrieval-augmented Q&amp;A or streaming chat.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>enable_thinking</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>enable_thinking node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>reasoning_budget</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>reasoning_budget node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>stepfun-ai/step-3.7-flash</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>stepfun-ai/step-3.7-flash node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>temperature</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>temperature node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>top_p</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>top_p node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>max_tokens</code><br><small style="color:var(--muted)">examples/overrides.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>max_tokens node in examples/overrides.json.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>GRAPH_REPORT.md</code><br><small style="color:var(--muted)">nim_proxy/GRAPH_REPORT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing GRAPH_REPORT.md.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>OpenCode JSON</code><br><small style="color:var(--muted)">examples/opencode.json.snippet</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing OpenCode JSON.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>examples/overrides.json</code></td><td>13 nodes</td></tr>
+<tr><td><code>examples/opencode.json.snippet</code></td><td>1 nodes</td></tr>
+<tr><td><code>nim_proxy/GRAPH_REPORT.md</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x15. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 3. CLI & Skill Installers ====== -->
+<h2 id="cli-skills">3. CLI &amp; Skill Installers</h2>
+<p>CLI &amp; Skill Installers groups implementation around readmemd, autolaunchsh, scripts, opencode, mostly in README.md, scripts/autolaunch.sh, .opencode/opencode.json. This section covers 23 nodes and 20 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: CLI &amp; Skill Installers (23 nodes, 20 edges)
+    subgraph cli_skills_README_md_f7b7a552["README.md"]
+        readme_auth_a82de789("Auth<br/><small>README.md</small>")
+        readme_configure_overrides_5d82a6c1("Configure overrides<br/><small>README.md</small>")
+        readme_install_4b6a4c2f("Install<br/><small>README.md</small>")
+        readme_license_edbe4ad9("License<br/><small>README.md</small>")
+        readme_opencode_d0feefff("Opencode<br/><small>README.md</small>")
+        readme_override_schema_17b02764("Override schema<br/><small>README.md</small>")
+        readme_project_layout_9bb9c319("Project layout<br/><small>README.md</small>")
+        readme_f78a71af("README.md")
+    end
+    subgraph cli_skills_scripts_autolaunch_sh_5dada254["scripts/autolaunch.sh"]
+        users_andrew_code_scubamount_nim_proxy_scripts_a_20427684("autolaunch.sh script<br/><small>scripts/autolaunch.sh</small>")
+        scripts_autolaunch_install_plist_d8ab2073("install_plist()<br/><small>scripts/autolaunch.sh</small>")
+        scripts_autolaunch_uninstall_plist_6a5bdecb("uninstall_plist()<br/><small>scripts/autolaunch.sh</small>")
+        scripts_autolaunch_d1c85c76("autolaunch.sh")
+    end
+    subgraph cli_skills_opencode_opencode_json_33985a00[".opencode/opencode.json"]
+        opencode_opencode_72f859f5("opencode.json")
+        opencode_opencode_plugin_e89e6a7e("plugin<br/><small>.opencode/opencode.json</small>")
+    end
+    subgraph cli_skills_opencode_plugins_graphify_js_c203c7a6[".opencode/plugins/graphify.js"]
+        plugins_graphify_graphifyplugin_6ef8cf61("GraphifyPlugin()<br/><small>.opencode/plugins/graphify.js</small>")
+        plugins_graphify_ddefb849("graphify.js")
+    end
+    subgraph cli_skills_scripts_install_sh_ac0dc521["scripts/install.sh"]
+        scripts_install_7dee6d13("install.sh")
+        users_andrew_code_scubamount_nim_proxy_scripts_i_ff64fb06("install.sh script<br/><small>scripts/install.sh</small>")
+    end
+    users_andrew_code_scubamount_nim_proxy_scripts_a_20427684 -->|calls| scripts_autolaunch_install_plist_d8ab2073
+    users_andrew_code_scubamount_nim_proxy_scripts_a_20427684 -->|calls| scripts_autolaunch_uninstall_plist_6a5bdecb
+    %% Omitted for readability: 5 nodes, 0 edges
+    class readme_auth_a82de789 concept;
+    class readme_configure_overrides_5d82a6c1 concept;
+    class readme_install_4b6a4c2f concept;
+    class readme_license_edbe4ad9 concept;
+    class readme_opencode_d0feefff concept;
+    class readme_override_schema_17b02764 concept;
+    class readme_project_layout_9bb9c319 concept;
+    class readme_f78a71af concept;
+    class users_andrew_code_scubamount_nim_proxy_scripts_a_20427684 function;
+    class scripts_autolaunch_install_plist_d8ab2073 function;
+    class scripts_autolaunch_uninstall_plist_6a5bdecb function;
+    class scripts_autolaunch_d1c85c76 function;
+    class opencode_opencode_72f859f5 function;
+    class opencode_opencode_plugin_e89e6a7e function;
+    class plugins_graphify_graphifyplugin_6ef8cf61 function;
+    class plugins_graphify_ddefb849 module;
+    class scripts_install_7dee6d13 function;
+    class users_andrew_code_scubamount_nim_proxy_scripts_i_ff64fb06 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>README.md</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing README.md.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>scubamount-nim-proxy</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing scubamount-nim-proxy.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>Install</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Install.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>Auth</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Auth.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>Run</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Run.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>Configure overrides</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Configure overrides.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>Override schema</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Override schema.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>Use with any OpenAI-compatible client</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Use with any OpenAI-compatible client.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>Opencode</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Opencode.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>Update</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Update.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>Uninstall</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Uninstall.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>Project layout</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Project layout.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>License</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing License.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>autolaunch.sh</code><br><small style="color:var(--muted)">scripts/autolaunch.sh</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>autolaunch.sh node in scripts/autolaunch.sh.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>autolaunch.sh script</code><br><small style="color:var(--muted)">scripts/autolaunch.sh</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>install_plist()</code><br><small style="color:var(--muted)">scripts/autolaunch.sh</small><br><code>uninstall_plist()</code><br><small style="color:var(--muted)">scripts/autolaunch.sh</small></td>
+  <td>autolaunch.sh script node in scripts/autolaunch.sh.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>install_plist()</code><br><small style="color:var(--muted)">scripts/autolaunch.sh</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>autolaunch.sh script</code><br><small style="color:var(--muted)">scripts/autolaunch.sh</small></td>
+  <td>No direct outbound edge</td>
+  <td>install_plist() node in scripts/autolaunch.sh.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>uninstall_plist()</code><br><small style="color:var(--muted)">scripts/autolaunch.sh</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>autolaunch.sh script</code><br><small style="color:var(--muted)">scripts/autolaunch.sh</small></td>
+  <td>No direct outbound edge</td>
+  <td>uninstall_plist() node in scripts/autolaunch.sh.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>opencode.json</code><br><small style="color:var(--muted)">.opencode/opencode.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>opencode.json node in .opencode/opencode.json.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>plugin</code><br><small style="color:var(--muted)">.opencode/opencode.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>plugin node in .opencode/opencode.json.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>graphify.js</code><br><small style="color:var(--muted)">.opencode/plugins/graphify.js</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Builds dependency relationships and graph data.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>GraphifyPlugin()</code><br><small style="color:var(--muted)">.opencode/plugins/graphify.js</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Builds dependency relationships and graph data.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>install.sh</code><br><small style="color:var(--muted)">scripts/install.sh</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>install.sh node in scripts/install.sh.</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>install.sh script</code><br><small style="color:var(--muted)">scripts/install.sh</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>install.sh script node in scripts/install.sh.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>README.md</code></td><td>13 nodes</td></tr>
+<tr><td><code>scripts/autolaunch.sh</code></td><td>4 nodes</td></tr>
+<tr><td><code>.opencode/opencode.json</code></td><td>2 nodes</td></tr>
+<tr><td><code>.opencode/plugins/graphify.js</code></td><td>2 nodes</td></tr>
+<tr><td><code>scripts/install.sh</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x16, defines x2, calls x2. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 4. Ingestion & Updates ====== -->
+<h2 id="ingest-cache-update">4. Ingestion &amp; Updates</h2>
+<p>Ingestion &amp; Updates groups implementation around updatesh, scripts, script, mostly in scripts/update.sh. This section covers 2 nodes and 1 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Ingestion &amp; Updates (2 nodes, 1 edges)
+    scripts_update_b9881f8f("update.sh")
+    users_andrew_code_scubamount_nim_proxy_scripts_u_d28280f4("update.sh script<br/><small>scripts/update.sh</small>")
+    scripts_update_b9881f8f -->|contains| users_andrew_code_scubamount_nim_proxy_scripts_u_d28280f4
+    class scripts_update_b9881f8f function;
+    class users_andrew_code_scubamount_nim_proxy_scripts_u_d28280f4 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>update.sh</code><br><small style="color:var(--muted)">scripts/update.sh</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>update.sh node in scripts/update.sh.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>update.sh script</code><br><small style="color:var(--muted)">scripts/update.sh</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>update.sh script node in scripts/update.sh.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>scripts/update.sh</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 5. Tests & Fixtures ====== -->
+<h2 id="tests-fixtures">5. Tests &amp; Fixtures</h2>
+<p>Tests &amp; Fixtures groups implementation around test, overridespy, tests, nim, mostly in tests/test_overrides.py, nim_proxy/app.py, nim_proxy/config.py. This section covers 25 nodes and 38 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Tests &amp; Fixtures (25 nodes, 38 edges)
+    subgraph tests_fixtures_tests_test_overrides_py_2c552c7d["tests/test_overrides.py"]
+        tests_test_overrides_capture_post_fae564eb("_capture_post()<br/><small>tests/test_overrides.py</small>")
+        tests_test_overrides_test_default_override_appli_c811b15e("default override applied()<br/><small>tests/test_overrides.py</small>")
+        tests_test_overrides_test_max_tokens_cap_overrid_ddf671f8("cap override wins()<br/><small>tests/test_overrides.py</small>")
+        tests_test_overrides_test_max_tokens_incoming_wi_5666e083("tokens incoming wins()<br/><small>tests/test_overrides.py</small>")
+        tests_test_overrides_test_no_override_unknown_mo_1535b19c("override unknown model()<br/><small>tests/test_overrides.py</small>")
+        tests_test_overrides_test_path_rewrite_27c902dd("test_path_rewrite()<br/><small>tests/test_overrides.py</small>")
+        tests_test_overrides_48fa2d53("test_overrides.py")
+    end
+    subgraph tests_fixtures_nim_proxy_app_py_a98bd1a3["nim_proxy/app.py"]
+        nim_proxy_app_3fbd98ed("app.py")
+        nim_proxy_app_apply_override_bc3b7ebc("_apply_override()<br/><small>nim_proxy/app.py</small>")
+        nim_proxy_app_main_3371d888("main()<br/><small>nim_proxy/app.py</small>")
+        nim_proxy_app_rationale_1_c15d9ce9("FastAPI app: OpenAI-compatible request...<br/><small>nim_proxy/app.py</small>")
+    end
+    subgraph tests_fixtures_nim_proxy_config_py_e4550278["nim_proxy/config.py"]
+        nim_proxy_config_e6088a0e("config.py")
+        nim_proxy_config_load_overrides_f53191c8("load_overrides()<br/><small>nim_proxy/config.py</small>")
+        nim_proxy_config_rationale_1_9ce8214d("Centralized config from env vars. Pure...<br/><small>nim_proxy/config.py</small>")
+        nim_proxy_config_rationale_20_ab651e8c("Return override dict. JSON file at $NIM...<br/><small>nim_proxy/config.py</small>")
+    end
+    subgraph tests_fixtures_nim_proxy_init_py_1b5e8780["nim_proxy/__init__.py"]
+        nim_proxy_init_3f2368c1("__init__.py")
+        nim_proxy_init_rationale_1_f5c98eca("scubamount-nim-proxy: OpenAI-compatible...<br/><small>nim_proxy/__init__.py</small>")
+    end
+    nim_proxy_main_741efa9d("__main__.py")
+    nim_proxy_app_apply_override_bc3b7ebc -->|calls| nim_proxy_config_load_overrides_f53191c8
+    tests_test_overrides_capture_post_fae564eb -->|calls| tests_test_overrides_test_default_override_appli_c811b15e
+    tests_test_overrides_capture_post_fae564eb -->|calls| tests_test_overrides_test_max_tokens_cap_overrid_ddf671f8
+    tests_test_overrides_capture_post_fae564eb -->|calls| tests_test_overrides_test_max_tokens_incoming_wi_5666e083
+    tests_test_overrides_capture_post_fae564eb -->|calls| tests_test_overrides_test_no_override_unknown_mo_1535b19c
+    tests_test_overrides_capture_post_fae564eb -->|calls| tests_test_overrides_test_path_rewrite_27c902dd
+    nim_proxy_init_3f2368c1 -->|imports| nim_proxy_app_apply_override_bc3b7ebc
+    nim_proxy_init_3f2368c1 -->|imports| nim_proxy_config_load_overrides_f53191c8
+    nim_proxy_main_741efa9d -->|imports| nim_proxy_app_3fbd98ed
+    nim_proxy_main_741efa9d -->|imports| nim_proxy_app_main_3371d888
+    nim_proxy_app_3fbd98ed -->|imports| nim_proxy_config_e6088a0e
+    nim_proxy_app_3fbd98ed -->|imports| nim_proxy_config_load_overrides_f53191c8
+    nim_proxy_app_3fbd98ed -->|imports| tests_test_overrides_48fa2d53
+    nim_proxy_config_e6088a0e -->|imports| tests_test_overrides_48fa2d53
+    nim_proxy_config_load_overrides_f53191c8 -->|imports| tests_test_overrides_48fa2d53
+    %% Omitted for readability: 7 nodes, 0 edges
+    class tests_test_overrides_capture_post_fae564eb test;
+    class tests_test_overrides_test_default_override_appli_c811b15e test;
+    class tests_test_overrides_test_max_tokens_cap_overrid_ddf671f8 test;
+    class tests_test_overrides_test_max_tokens_incoming_wi_5666e083 test;
+    class tests_test_overrides_test_no_override_unknown_mo_1535b19c test;
+    class tests_test_overrides_test_path_rewrite_27c902dd test;
+    class tests_test_overrides_48fa2d53 test;
+    class nim_proxy_app_3fbd98ed module;
+    class nim_proxy_app_apply_override_bc3b7ebc function;
+    class nim_proxy_app_main_3371d888 function;
+    class nim_proxy_app_rationale_1_c15d9ce9 concept;
+    class nim_proxy_config_e6088a0e module;
+    class nim_proxy_config_load_overrides_f53191c8 function;
+    class nim_proxy_config_rationale_1_9ce8214d concept;
+    class nim_proxy_config_rationale_20_ab651e8c concept;
+    class nim_proxy_init_3f2368c1 module;
+    class nim_proxy_init_rationale_1_f5c98eca concept;
+    class nim_proxy_main_741efa9d module;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>__init__.py</code><br><small style="color:var(--muted)">nim_proxy/__init__.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>_apply_override()</code><br><small style="color:var(--muted)">nim_proxy/app.py</small><br><code>load_overrides()</code><br><small style="color:var(--muted)">nim_proxy/config.py</small></td>
+  <td>Module file in nim_proxy/__init__.py.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>scubamount-nim-proxy: OpenAI-compatible bridge to NVIDIA NIM with per-model over</code><br><small style="color:var(--muted)">nim_proxy/__init__.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for scubamount-nim-proxy: OpenAI-compatible bridge to NVIDIA NIM with per-model over.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>__main__.py</code><br><small style="color:var(--muted)">nim_proxy/__main__.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>app.py</code><br><small style="color:var(--muted)">nim_proxy/app.py</small><br><code>main()</code><br><small style="color:var(--muted)">nim_proxy/app.py</small></td>
+  <td>Module file in nim_proxy/__main__.py.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>app.py</code><br><small style="color:var(--muted)">nim_proxy/app.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td><code>__main__.py</code><br><small style="color:var(--muted)">nim_proxy/__main__.py</small></td>
+  <td><code>config.py</code><br><small style="color:var(--muted)">nim_proxy/config.py</small><br><code>load_overrides()</code><br><small style="color:var(--muted)">nim_proxy/config.py</small><br><code>test_overrides.py</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td>Module file in nim_proxy/app.py.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>_apply_override()</code><br><small style="color:var(--muted)">nim_proxy/app.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>__init__.py</code><br><small style="color:var(--muted)">nim_proxy/__init__.py</small></td>
+  <td><code>load_overrides()</code><br><small style="color:var(--muted)">nim_proxy/config.py</small></td>
+  <td>_apply_override() node in nim_proxy/app.py.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">nim_proxy/app.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>__main__.py</code><br><small style="color:var(--muted)">nim_proxy/__main__.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>main() node in nim_proxy/app.py.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>FastAPI app: OpenAI-compatible request handler that injects per-model overrides.</code><br><small style="color:var(--muted)">nim_proxy/app.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for FastAPI app: OpenAI-compatible request handler that injects per-model overrides..</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>config.py</code><br><small style="color:var(--muted)">nim_proxy/config.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td><code>app.py</code><br><small style="color:var(--muted)">nim_proxy/app.py</small></td>
+  <td><code>test_overrides.py</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td>Module file in nim_proxy/config.py.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>load_overrides()</code><br><small style="color:var(--muted)">nim_proxy/config.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>__init__.py</code><br><small style="color:var(--muted)">nim_proxy/__init__.py</small><br><code>_apply_override()</code><br><small style="color:var(--muted)">nim_proxy/app.py</small><br><code>app.py</code><br><small style="color:var(--muted)">nim_proxy/app.py</small></td>
+  <td><code>test_overrides.py</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td>load_overrides() node in nim_proxy/config.py.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>Centralized config from env vars. Pure stdlib.</code><br><small style="color:var(--muted)">nim_proxy/config.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Centralized config from env vars. Pure stdlib..</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>Return override dict. JSON file at $NIM_PROXY_OVERRIDES if set, else built-in.</code><br><small style="color:var(--muted)">nim_proxy/config.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Return override dict. JSON file at $NIM_PROXY_OVERRIDES if set, else built-in..</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>test_overrides.py</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td><code>app.py</code><br><small style="color:var(--muted)">nim_proxy/app.py</small><br><code>config.py</code><br><small style="color:var(--muted)">nim_proxy/config.py</small><br><code>load_overrides()</code><br><small style="color:var(--muted)">nim_proxy/config.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in tests/test_overrides.py.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>Tests for per-model override injection.</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Tests for per-model override injection..</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>_capture_post()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>cap override wins()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small><br><code>default override applied()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small><br><code>override unknown model()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small><br>+2 more</td>
+  <td>_capture_post() node in tests/test_overrides.py.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>test_default_override_applied()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td><code>_capture_post()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>test_no_override_unknown_model()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td><code>_capture_post()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>test_path_rewrite()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td><code>_capture_post()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>test_max_tokens_cap_override_wins()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td><code>_capture_post()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>test_max_tokens_incoming_wins()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td><code>_capture_post()</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>Return a mock for httpx.AsyncClient.post that records calls.</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Return a mock for httpx.AsyncClient.post that records calls..</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>Nemotron model gets temperature=1, top_p=0.95, max_tokens=16384, reasoning field</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Nemotron model gets temperature=1, top_p=0.95, max_tokens=16384, reasoning field.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>Unknown model passes through without extra fields.</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Unknown model passes through without extra fields..</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>Upstream URL preserves /v1 (no double /v1/v1).</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Upstream URL preserves /v1 (no double /v1/v1)..</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>When incoming max_tokens &lt; override, override value used.</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for When incoming max_tokens &lt; override, override value used..</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>When incoming max_tokens &gt; override, incoming value used.</code><br><small style="color:var(--muted)">tests/test_overrides.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for When incoming max_tokens &gt; override, incoming value used..</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>tests/test_overrides.py</code></td><td>14 nodes</td></tr>
+<tr><td><code>nim_proxy/app.py</code></td><td>4 nodes</td></tr>
+<tr><td><code>nim_proxy/config.py</code></td><td>4 nodes</td></tr>
+<tr><td><code>nim_proxy/__init__.py</code></td><td>2 nodes</td></tr>
+<tr><td><code>nim_proxy/__main__.py</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: explains x12, contains x9, calls x6, imports x5. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 6. Community 3 ====== -->
+<h2 id="community-3">6. Community 3</h2>
+<p>Community 3 groups implementation around nim, proxy, apppy, catch, mostly in nim_proxy/app.py. This section covers 4 nodes and 3 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 3 (4 nodes, 3 edges)
+    nim_proxy_app_catch_all_f24da286("catch_all()<br/><small>nim_proxy/app.py</small>")
+    request_088e29b0("Request<br/><small>nim_proxy/app.py</small>")
+    str_3442496b("str<br/><small>nim_proxy/app.py</small>")
+    streamingresponse_8763a540("StreamingResponse<br/><small>nim_proxy/app.py</small>")
+    nim_proxy_app_catch_all_f24da286 -->|references| request_088e29b0
+    nim_proxy_app_catch_all_f24da286 -->|references| str_3442496b
+    nim_proxy_app_catch_all_f24da286 -->|references| streamingresponse_8763a540
+    class nim_proxy_app_catch_all_f24da286 function;
+    class request_088e29b0 klass;
+    class str_3442496b function;
+    class streamingresponse_8763a540 async;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>catch_all()</code><br><small style="color:var(--muted)">nim_proxy/app.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>catch_all() node in nim_proxy/app.py.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>Request</code><br><small style="color:var(--muted)">nim_proxy/app.py</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Request node in nim_proxy/app.py.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>str</code><br><small style="color:var(--muted)">nim_proxy/app.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>str node in nim_proxy/app.py.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>StreamingResponse</code><br><small style="color:var(--muted)">nim_proxy/app.py</small></td>
+  <td><span class="tag tag-async">Async</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>StreamingResponse node in nim_proxy/app.py.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>nim_proxy/app.py</code></td><td>4 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: references x3. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 7. Community 17 ====== -->
+<h2 id="community-17">7. Community 17</h2>
+<p>Community 17 groups implementation around agentsmd, graphify, mostly in AGENTS.md. This section covers 2 nodes and 1 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 17 (2 nodes, 1 edges)
+    agents_e7052aeb("AGENTS.md")
+    agents_graphify_933e8fd9("graphify<br/><small>AGENTS.md</small>")
+    agents_e7052aeb -->|contains| agents_graphify_933e8fd9
+    class agents_e7052aeb concept;
+    class agents_graphify_933e8fd9 concept;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>AGENTS.md</code><br><small style="color:var(--muted)">AGENTS.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing AGENTS.md.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>graphify</code><br><small style="color:var(--muted)">AGENTS.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing graphify.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>AGENTS.md</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 8. Community 5 ====== -->
+<h2 id="community-5">8. Community 5</h2>
+<p>Community 5 groups implementation around overridespy, nim, proxy, model, mostly in nim_proxy/overrides.py. This section covers 2 nodes and 1 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 5 (2 nodes, 1 edges)
+    nim_proxy_overrides_76596524("overrides.py")
+    nim_proxy_overrides_rationale_1_7a1891ac("Per-model override dict. Schema: '&lt;pr...<br/><small>nim_proxy/overrides.py</small>")
+    nim_proxy_overrides_76596524 -->|explains| nim_proxy_overrides_rationale_1_7a1891ac
+    class nim_proxy_overrides_76596524 module;
+    class nim_proxy_overrides_rationale_1_7a1891ac concept;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>overrides.py</code><br><small style="color:var(--muted)">nim_proxy/overrides.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Module file in nim_proxy/overrides.py.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>Per-model override dict.  Schema: { &quot;&lt;provider&gt;/&lt;model&gt;&quot;: { &quot;temperature&quot;, &quot;top_</code><br><small style="color:var(--muted)">nim_proxy/overrides.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Per-model override dict.  Schema: { &quot;&lt;provider&gt;/&lt;model&gt;&quot;: { &quot;temperature&quot;, &quot;top_.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>nim_proxy/overrides.py</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: explains x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 9. Community 9 ====== -->
+<h2 id="community-9">9. Community 9</h2>
+<p>Community 9 groups implementation around restartsh, scripts, script, mostly in scripts/restart.sh. This section covers 2 nodes and 1 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 9 (2 nodes, 1 edges)
+    scripts_restart_78133cf0("restart.sh")
+    users_andrew_code_scubamount_nim_proxy_scripts_r_5f39f931("restart.sh script<br/><small>scripts/restart.sh</small>")
+    scripts_restart_78133cf0 -->|contains| users_andrew_code_scubamount_nim_proxy_scripts_r_5f39f931
+    class scripts_restart_78133cf0 function;
+    class users_andrew_code_scubamount_nim_proxy_scripts_r_5f39f931 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>restart.sh</code><br><small style="color:var(--muted)">scripts/restart.sh</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>restart.sh node in scripts/restart.sh.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>restart.sh script</code><br><small style="color:var(--muted)">scripts/restart.sh</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>restart.sh script node in scripts/restart.sh.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>scripts/restart.sh</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 10. Community 12 ====== -->
+<h2 id="community-12">10. Community 12</h2>
+<p>Community 12 groups implementation around knowledge, graph, agentsmd, mostly in AGENTS.md. This section covers 1 nodes and 0 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 12 (1 nodes, 0 edges)
+    knowledge_graph_f0f531ba("Knowledge Graph<br/><small>AGENTS.md</small>")
+    class knowledge_graph_f0f531ba concept;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>Knowledge Graph</code><br><small style="color:var(--muted)">AGENTS.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Knowledge Graph.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>AGENTS.md</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: No high-confidence call edges detected. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 11. Community 13 ====== -->
+<h2 id="community-13">11. Community 13</h2>
+<p>Community 13 groups implementation around nim, proxy, overridespy, mostly in nim_proxy/overrides.py. This section covers 1 nodes and 0 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 13 (1 nodes, 0 edges)
+    nim_proxy_ed3b1084("nim_proxy<br/><small>nim_proxy/overrides.py</small>")
+    class nim_proxy_ed3b1084 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>nim_proxy</code><br><small style="color:var(--muted)">nim_proxy/overrides.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>nim_proxy node in nim_proxy/overrides.py.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>nim_proxy/overrides.py</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: No high-confidence call edges detected. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 12. Community 15 ====== -->
+<h2 id="community-15">12. Community 15</h2>
+<p>Community 15 groups implementation around project, layout, readmemd, mostly in README.md. This section covers 1 nodes and 0 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 15 (1 nodes, 0 edges)
+    project_layout_99de52a4("Project Layout<br/><small>README.md</small>")
+    class project_layout_99de52a4 concept;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>Project Layout</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Project Layout.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>README.md</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: No high-confidence call edges detected. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<h2 id="stats">Project Statistics</h2>
+
+<div class="grid">
+  <div class="card">
+    <h4>Graph</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><td>Nodes</td><td>78</td></tr>
+      <tr><td>Edges</td><td>82</td></tr>
+      <tr><td>Hyperedges</td><td>0</td></tr>
+      <tr><td>Communities</td><td>18</td></tr>
+      <tr><td>Documented Sections</td><td>11</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Edge Confidence</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><td>EXTRACTED</td><td>82</td></tr>
+      <tr><td>INFERRED</td><td>0</td></tr>
+      <tr><td>AMBIGUOUS</td><td>0</td></tr>
+    </table>
+  </div>
+</div>
+
+<div style="text-align:center; padding:40px 0; color: var(--muted); font-size:0.9rem;">
+  <p>scubamount-nim-proxy — Architecture Documentation</p>
+  <p>Generated: 2026-06-04 20:52 UTC · graphify callflow-html</p>
+</div>
+
+</div><!-- .container -->
+
+<script>
+(function () {
+  const mermaidConfig = {
+    startOnLoad: false,
+    theme: 'dark',
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    themeVariables: {
+      primaryColor: '#1e293b',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#38bdf8',
+      secondaryColor: '#0f172a',
+      tertiaryColor: '#334155',
+      lineColor: '#64748b',
+      textColor: '#e2e8f0',
+    }
+  };
+
+  mermaid.initialize(mermaidConfig);
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function enhanceMermaidDiagrams() {
+    document.querySelectorAll('.mermaid').forEach((container) => {
+      if (container.dataset.zoomReady === 'true') return;
+      const svg = container.querySelector('svg');
+      if (!svg) return;
+
+      container.dataset.zoomReady = 'true';
+      container.classList.add('is-enhanced');
+
+      const viewport = document.createElement('div');
+      viewport.className = 'mermaid-viewport';
+      svg.parentNode.insertBefore(viewport, svg);
+      viewport.appendChild(svg);
+
+      const toolbar = document.createElement('div');
+      toolbar.className = 'mermaid-toolbar';
+      toolbar.innerHTML = [
+        '<button type="button" data-action="zoom-out" title="Zoom out">-</button>',
+        '<span class="zoom-level" data-role="level">100%</span>',
+        '<button type="button" data-action="zoom-in" title="Zoom in">+</button>',
+        '<button type="button" data-action="fit" title="Fit width">Fit</button>',
+        '<button type="button" data-action="reset" title="Reset view">Reset</button>'
+      ].join('');
+      container.insertBefore(toolbar, viewport);
+
+      const state = { scale: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0, originX: 0, originY: 0 };
+      const level = toolbar.querySelector('[data-role="level"]');
+
+      function applyTransform() {
+        svg.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+        level.textContent = `${Math.round(state.scale * 100)}%`;
+      }
+
+      function zoomBy(delta) {
+        state.scale = clamp(state.scale + delta, 0.25, 3);
+        applyTransform();
+      }
+
+      function reset() {
+        state.scale = 1;
+        state.x = 0;
+        state.y = 0;
+        applyTransform();
+      }
+
+      function fitWidth() {
+        const rawWidth = svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width
+          ? svg.viewBox.baseVal.width
+          : svg.getBoundingClientRect().width / state.scale;
+        if (!rawWidth) {
+          reset();
+          return;
+        }
+        state.scale = clamp((viewport.clientWidth - 48) / rawWidth, 0.25, 1.4);
+        state.x = 0;
+        state.y = 0;
+        applyTransform();
+      }
+
+      toolbar.addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const action = button.dataset.action;
+        if (action === 'zoom-in') zoomBy(0.15);
+        if (action === 'zoom-out') zoomBy(-0.15);
+        if (action === 'fit') fitWidth();
+        if (action === 'reset') reset();
+      });
+
+      viewport.addEventListener('wheel', (event) => {
+        if (!event.ctrlKey && !event.metaKey) return;
+        event.preventDefault();
+        zoomBy(event.deltaY < 0 ? 0.1 : -0.1);
+      }, { passive: false });
+
+      viewport.addEventListener('pointerdown', (event) => {
+        if (event.button !== 0) return;
+        state.dragging = true;
+        state.startX = event.clientX;
+        state.startY = event.clientY;
+        state.originX = state.x;
+        state.originY = state.y;
+        viewport.classList.add('is-dragging');
+        viewport.setPointerCapture(event.pointerId);
+      });
+
+      viewport.addEventListener('pointermove', (event) => {
+        if (!state.dragging) return;
+        state.x = state.originX + event.clientX - state.startX;
+        state.y = state.originY + event.clientY - state.startY;
+        applyTransform();
+      });
+
+      function endDrag(event) {
+        if (!state.dragging) return;
+        state.dragging = false;
+        viewport.classList.remove('is-dragging');
+        if (viewport.hasPointerCapture(event.pointerId)) {
+          viewport.releasePointerCapture(event.pointerId);
+        }
+      }
+
+      viewport.addEventListener('pointerup', endDrag);
+      viewport.addEventListener('pointercancel', endDrag);
+      applyTransform();
+    });
+  }
+
+  function renderMermaid() {
+    const result = mermaid.run
+      ? mermaid.run({ querySelector: '.mermaid' })
+      : Promise.resolve();
+    Promise.resolve(result)
+      .then(enhanceMermaidDiagrams)
+      .catch((error) => {
+        console.error('Mermaid render failed:', error);
+        enhanceMermaidDiagrams();
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderMermaid);
+  } else {
+    renderMermaid();
+  }
+})();
+</script>
+
+</body>
+</html>

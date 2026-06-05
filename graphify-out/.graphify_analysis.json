@@ -1,0 +1,195 @@
+{
+  "communities": {
+    "0": [
+      "nim_proxy_app",
+      "nim_proxy_app_apply_override",
+      "nim_proxy_app_catch_all",
+      "nim_proxy_app_main",
+      "nim_proxy_app_rationale_1",
+      "nim_proxy_config",
+      "nim_proxy_config_load_overrides",
+      "nim_proxy_config_rationale_1",
+      "nim_proxy_config_rationale_20",
+      "nim_proxy_init",
+      "nim_proxy_init_rationale_1",
+      "nim_proxy_main",
+      "request",
+      "str",
+      "streamingresponse"
+    ],
+    "1": [
+      "project_layout",
+      "readme",
+      "readme_auth",
+      "readme_configure_overrides",
+      "readme_install",
+      "readme_license",
+      "readme_opencode",
+      "readme_override_schema",
+      "readme_run",
+      "readme_scubamount_nim_proxy",
+      "readme_uninstall",
+      "readme_update",
+      "readme_use_with_any_openai_compatible_client"
+    ],
+    "2": [
+      "tests_test_overrides",
+      "tests_test_overrides_capture_post",
+      "tests_test_overrides_rationale_1",
+      "tests_test_overrides_rationale_22",
+      "tests_test_overrides_rationale_34",
+      "tests_test_overrides_rationale_57",
+      "tests_test_overrides_rationale_76",
+      "tests_test_overrides_rationale_88",
+      "tests_test_overrides_test_default_override_applied",
+      "tests_test_overrides_test_max_tokens_cap_override_wins",
+      "tests_test_overrides_test_max_tokens_incoming_wins",
+      "tests_test_overrides_test_no_override_unknown_model",
+      "tests_test_overrides_test_path_rewrite"
+    ],
+    "3": [
+      "examples_overrides",
+      "examples_overrides_chat_template_kwargs_enable_thinking",
+      "examples_overrides_extra_body_chat_template_kwargs",
+      "examples_overrides_extra_body_reasoning_budget",
+      "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b",
+      "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b_extra_body",
+      "examples_overrides_stepfun_ai_step_3_7_flash",
+      "examples_overrides_stepfun_ai_step_3_7_flash_max_tokens",
+      "examples_overrides_stepfun_ai_step_3_7_flash_temperature",
+      "examples_overrides_stepfun_ai_step_3_7_flash_top_p"
+    ],
+    "4": [
+      "scripts_autolaunch",
+      "scripts_autolaunch_install_plist",
+      "users_andrew_code_scubamount_nim_proxy_scripts_autolaunch_sh__entry"
+    ],
+    "5": [
+      "agents",
+      "agents_graphify"
+    ],
+    "6": [
+      "nim_proxy_overrides",
+      "nim_proxy_overrides_rationale_1"
+    ],
+    "7": [
+      "opencode_opencode",
+      "opencode_opencode_plugin"
+    ],
+    "8": [
+      "plugins_graphify",
+      "plugins_graphify_graphifyplugin"
+    ],
+    "9": [
+      "scripts_install",
+      "users_andrew_code_scubamount_nim_proxy_scripts_install_sh__entry"
+    ],
+    "10": [
+      "scripts_restart",
+      "users_andrew_code_scubamount_nim_proxy_scripts_restart_sh__entry"
+    ],
+    "11": [
+      "scripts_update",
+      "users_andrew_code_scubamount_nim_proxy_scripts_update_sh__entry"
+    ],
+    "12": [
+      "graph_report_md"
+    ],
+    "13": [
+      "knowledge_graph"
+    ],
+    "14": [
+      "nim_proxy"
+    ],
+    "15": [
+      "opencode_json"
+    ]
+  },
+  "cohesion": {
+    "0": 0.2,
+    "1": 0.15384615384615385,
+    "2": 0.23076923076923078,
+    "3": 0.26666666666666666,
+    "4": 1.0,
+    "5": 1.0,
+    "6": 1.0,
+    "7": 1.0,
+    "8": 1.0,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0,
+    "13": 1.0,
+    "14": 1.0,
+    "15": 1.0
+  },
+  "gods": [
+    {
+      "id": "readme_scubamount_nim_proxy",
+      "label": "scubamount-nim-proxy",
+      "degree": 11
+    },
+    {
+      "id": "tests_test_overrides_capture_post",
+      "label": "_capture_post()",
+      "degree": 7
+    },
+    {
+      "id": "nim_proxy_config_load_overrides",
+      "label": "load_overrides()",
+      "degree": 6
+    },
+    {
+      "id": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b",
+      "label": "nvidia/nemotron-3-ultra-550b-a55b",
+      "degree": 5
+    },
+    {
+      "id": "nim_proxy_app_catch_all",
+      "label": "catch_all()",
+      "degree": 5
+    },
+    {
+      "id": "examples_overrides_stepfun_ai_step_3_7_flash",
+      "label": "stepfun-ai/step-3.7-flash",
+      "degree": 4
+    },
+    {
+      "id": "nim_proxy_app_apply_override",
+      "label": "_apply_override()",
+      "degree": 4
+    },
+    {
+      "id": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b_extra_body",
+      "label": "extra_body",
+      "degree": 3
+    },
+    {
+      "id": "tests_test_overrides_test_default_override_applied",
+      "label": "test_default_override_applied()",
+      "degree": 3
+    },
+    {
+      "id": "tests_test_overrides_test_no_override_unknown_model",
+      "label": "test_no_override_unknown_model()",
+      "degree": 3
+    }
+  ],
+  "surprises": [
+    {
+      "source": "_apply_override()",
+      "target": "load_overrides()",
+      "source_files": [
+        "nim_proxy/app.py",
+        "nim_proxy/config.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

@@ -1,0 +1,1497 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "opencode.json",
+      "file_type": "code",
+      "source_file": ".opencode/opencode.json",
+      "source_location": "L1",
+      "community": 7,
+      "norm_label": "opencode.json",
+      "id": "opencode_opencode"
+    },
+    {
+      "label": "plugin",
+      "file_type": "code",
+      "source_file": ".opencode/opencode.json",
+      "source_location": "L2",
+      "community": 7,
+      "norm_label": "plugin",
+      "id": "opencode_opencode_plugin"
+    },
+    {
+      "label": "graphify.js",
+      "file_type": "code",
+      "source_file": ".opencode/plugins/graphify.js",
+      "source_location": "L1",
+      "community": 8,
+      "norm_label": "graphify.js",
+      "id": "plugins_graphify"
+    },
+    {
+      "label": "GraphifyPlugin()",
+      "file_type": "code",
+      "source_file": ".opencode/plugins/graphify.js",
+      "source_location": "L6",
+      "community": 8,
+      "norm_label": "graphifyplugin()",
+      "id": "plugins_graphify_graphifyplugin"
+    },
+    {
+      "label": "overrides.json",
+      "file_type": "code",
+      "source_file": "examples/overrides.json",
+      "source_location": "L1",
+      "community": 3,
+      "norm_label": "overrides.json",
+      "id": "examples_overrides"
+    },
+    {
+      "label": "nvidia/nemotron-3-ultra-550b-a55b",
+      "file_type": "code",
+      "source_file": "examples/overrides.json",
+      "source_location": "L2",
+      "community": 3,
+      "norm_label": "nvidia/nemotron-3-ultra-550b-a55b",
+      "id": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b"
+    },
+    {
+      "label": "extra_body",
+      "file_type": "code",
+      "source_file": "examples/overrides.json",
+      "source_location": "L6",
+      "community": 3,
+      "norm_label": "extra_body",
+      "id": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b_extra_body"
+    },
+    {
+      "label": "chat_template_kwargs",
+      "file_type": "code",
+      "source_file": "examples/overrides.json",
+      "source_location": "L7",
+      "community": 3,
+      "norm_label": "chat_template_kwargs",
+      "id": "examples_overrides_extra_body_chat_template_kwargs"
+    },
+    {
+      "label": "enable_thinking",
+      "file_type": "code",
+      "source_file": "examples/overrides.json",
+      "source_location": "L7",
+      "community": 3,
+      "norm_label": "enable_thinking",
+      "id": "examples_overrides_chat_template_kwargs_enable_thinking"
+    },
+    {
+      "label": "reasoning_budget",
+      "file_type": "code",
+      "source_file": "examples/overrides.json",
+      "source_location": "L8",
+      "community": 3,
+      "norm_label": "reasoning_budget",
+      "id": "examples_overrides_extra_body_reasoning_budget"
+    },
+    {
+      "label": "stepfun-ai/step-3.7-flash",
+      "file_type": "code",
+      "source_file": "examples/overrides.json",
+      "source_location": "L11",
+      "community": 3,
+      "norm_label": "stepfun-ai/step-3.7-flash",
+      "id": "examples_overrides_stepfun_ai_step_3_7_flash"
+    },
+    {
+      "label": "temperature",
+      "file_type": "code",
+      "source_file": "examples/overrides.json",
+      "source_location": "L12",
+      "community": 3,
+      "norm_label": "temperature",
+      "id": "examples_overrides_stepfun_ai_step_3_7_flash_temperature"
+    },
+    {
+      "label": "top_p",
+      "file_type": "code",
+      "source_file": "examples/overrides.json",
+      "source_location": "L13",
+      "community": 3,
+      "norm_label": "top_p",
+      "id": "examples_overrides_stepfun_ai_step_3_7_flash_top_p"
+    },
+    {
+      "label": "max_tokens",
+      "file_type": "code",
+      "source_file": "examples/overrides.json",
+      "source_location": "L14",
+      "community": 3,
+      "norm_label": "max_tokens",
+      "id": "examples_overrides_stepfun_ai_step_3_7_flash_max_tokens"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "nim_proxy/__init__.py",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "__init__.py",
+      "id": "nim_proxy_init"
+    },
+    {
+      "label": "scubamount-nim-proxy: OpenAI-compatible bridge to NVIDIA NIM with per-model over",
+      "file_type": "rationale",
+      "source_file": "nim_proxy/__init__.py",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "scubamount-nim-proxy: openai-compatible bridge to nvidia nim with per-model over",
+      "id": "nim_proxy_init_rationale_1"
+    },
+    {
+      "label": "__main__.py",
+      "file_type": "code",
+      "source_file": "nim_proxy/__main__.py",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "__main__.py",
+      "id": "nim_proxy_main"
+    },
+    {
+      "label": "app.py",
+      "file_type": "code",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "app.py",
+      "id": "nim_proxy_app"
+    },
+    {
+      "label": "_apply_override()",
+      "file_type": "code",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L17",
+      "community": 0,
+      "norm_label": "_apply_override()",
+      "id": "nim_proxy_app_apply_override"
+    },
+    {
+      "label": "catch_all()",
+      "file_type": "code",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L41",
+      "community": 0,
+      "norm_label": "catch_all()",
+      "id": "nim_proxy_app_catch_all"
+    },
+    {
+      "label": "Request",
+      "file_type": "code",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L41",
+      "community": 0,
+      "norm_label": "request",
+      "id": "request"
+    },
+    {
+      "label": "str",
+      "file_type": "code",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L41",
+      "community": 0,
+      "norm_label": "str",
+      "id": "str"
+    },
+    {
+      "label": "StreamingResponse",
+      "file_type": "code",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L41",
+      "community": 0,
+      "norm_label": "streamingresponse",
+      "id": "streamingresponse"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L98",
+      "community": 0,
+      "norm_label": "main()",
+      "id": "nim_proxy_app_main"
+    },
+    {
+      "label": "FastAPI app: OpenAI-compatible request handler that injects per-model overrides.",
+      "file_type": "rationale",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "fastapi app: openai-compatible request handler that injects per-model overrides.",
+      "id": "nim_proxy_app_rationale_1"
+    },
+    {
+      "label": "config.py",
+      "file_type": "code",
+      "source_file": "nim_proxy/config.py",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "config.py",
+      "id": "nim_proxy_config"
+    },
+    {
+      "label": "load_overrides()",
+      "file_type": "code",
+      "source_file": "nim_proxy/config.py",
+      "source_location": "L19",
+      "community": 0,
+      "norm_label": "load_overrides()",
+      "id": "nim_proxy_config_load_overrides"
+    },
+    {
+      "label": "Centralized config from env vars. Pure stdlib.",
+      "file_type": "rationale",
+      "source_file": "nim_proxy/config.py",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "centralized config from env vars. pure stdlib.",
+      "id": "nim_proxy_config_rationale_1"
+    },
+    {
+      "label": "Return override dict. JSON file at $NIM_PROXY_OVERRIDES if set, else built-in.",
+      "file_type": "rationale",
+      "source_file": "nim_proxy/config.py",
+      "source_location": "L20",
+      "community": 0,
+      "norm_label": "return override dict. json file at $nim_proxy_overrides if set, else built-in.",
+      "id": "nim_proxy_config_rationale_20"
+    },
+    {
+      "label": "overrides.py",
+      "file_type": "code",
+      "source_file": "nim_proxy/overrides.py",
+      "source_location": "L1",
+      "community": 6,
+      "norm_label": "overrides.py",
+      "id": "nim_proxy_overrides"
+    },
+    {
+      "label": "Per-model override dict.  Schema: { \"<provider>/<model>\": { \"temperature\", \"top_",
+      "file_type": "rationale",
+      "source_file": "nim_proxy/overrides.py",
+      "source_location": "L1",
+      "community": 6,
+      "norm_label": "per-model override dict.  schema: { \"<provider>/<model>\": { \"temperature\", \"top_",
+      "id": "nim_proxy_overrides_rationale_1"
+    },
+    {
+      "label": "autolaunch.sh",
+      "file_type": "code",
+      "source_file": "scripts/autolaunch.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "community": 4,
+      "norm_label": "autolaunch.sh",
+      "id": "scripts_autolaunch"
+    },
+    {
+      "label": "autolaunch.sh script",
+      "file_type": "code",
+      "source_file": "scripts/autolaunch.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "community": 4,
+      "norm_label": "autolaunch.sh script",
+      "id": "users_andrew_code_scubamount_nim_proxy_scripts_autolaunch_sh__entry"
+    },
+    {
+      "label": "install_plist()",
+      "file_type": "code",
+      "source_file": "scripts/autolaunch.sh",
+      "source_location": "L12",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_function"
+      },
+      "community": 4,
+      "norm_label": "install_plist()",
+      "id": "scripts_autolaunch_install_plist"
+    },
+    {
+      "label": "install.sh",
+      "file_type": "code",
+      "source_file": "scripts/install.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "community": 9,
+      "norm_label": "install.sh",
+      "id": "scripts_install"
+    },
+    {
+      "label": "install.sh script",
+      "file_type": "code",
+      "source_file": "scripts/install.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "community": 9,
+      "norm_label": "install.sh script",
+      "id": "users_andrew_code_scubamount_nim_proxy_scripts_install_sh__entry"
+    },
+    {
+      "label": "restart.sh",
+      "file_type": "code",
+      "source_file": "scripts/restart.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "community": 10,
+      "norm_label": "restart.sh",
+      "id": "scripts_restart"
+    },
+    {
+      "label": "restart.sh script",
+      "file_type": "code",
+      "source_file": "scripts/restart.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "community": 10,
+      "norm_label": "restart.sh script",
+      "id": "users_andrew_code_scubamount_nim_proxy_scripts_restart_sh__entry"
+    },
+    {
+      "label": "update.sh",
+      "file_type": "code",
+      "source_file": "scripts/update.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "community": 11,
+      "norm_label": "update.sh",
+      "id": "scripts_update"
+    },
+    {
+      "label": "update.sh script",
+      "file_type": "code",
+      "source_file": "scripts/update.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "community": 11,
+      "norm_label": "update.sh script",
+      "id": "users_andrew_code_scubamount_nim_proxy_scripts_update_sh__entry"
+    },
+    {
+      "label": "test_overrides.py",
+      "file_type": "code",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L1",
+      "community": 2,
+      "norm_label": "test_overrides.py",
+      "id": "tests_test_overrides"
+    },
+    {
+      "label": "_capture_post()",
+      "file_type": "code",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L21",
+      "community": 2,
+      "norm_label": "_capture_post()",
+      "id": "tests_test_overrides_capture_post"
+    },
+    {
+      "label": "test_default_override_applied()",
+      "file_type": "code",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L33",
+      "community": 2,
+      "norm_label": "test_default_override_applied()",
+      "id": "tests_test_overrides_test_default_override_applied"
+    },
+    {
+      "label": "test_no_override_unknown_model()",
+      "file_type": "code",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L56",
+      "community": 2,
+      "norm_label": "test_no_override_unknown_model()",
+      "id": "tests_test_overrides_test_no_override_unknown_model"
+    },
+    {
+      "label": "test_path_rewrite()",
+      "file_type": "code",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L75",
+      "community": 2,
+      "norm_label": "test_path_rewrite()",
+      "id": "tests_test_overrides_test_path_rewrite"
+    },
+    {
+      "label": "test_max_tokens_cap_override_wins()",
+      "file_type": "code",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L87",
+      "community": 2,
+      "norm_label": "test_max_tokens_cap_override_wins()",
+      "id": "tests_test_overrides_test_max_tokens_cap_override_wins"
+    },
+    {
+      "label": "test_max_tokens_incoming_wins()",
+      "file_type": "code",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L102",
+      "community": 2,
+      "norm_label": "test_max_tokens_incoming_wins()",
+      "id": "tests_test_overrides_test_max_tokens_incoming_wins"
+    },
+    {
+      "label": "Tests for per-model override injection.",
+      "file_type": "rationale",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L1",
+      "community": 2,
+      "norm_label": "tests for per-model override injection.",
+      "id": "tests_test_overrides_rationale_1"
+    },
+    {
+      "label": "Return a mock for httpx.AsyncClient.post that records calls.",
+      "file_type": "rationale",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L22",
+      "community": 2,
+      "norm_label": "return a mock for httpx.asyncclient.post that records calls.",
+      "id": "tests_test_overrides_rationale_22"
+    },
+    {
+      "label": "Nemotron model gets temperature=1, top_p=0.95, max_tokens=16384, reasoning field",
+      "file_type": "rationale",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L34",
+      "community": 2,
+      "norm_label": "nemotron model gets temperature=1, top_p=0.95, max_tokens=16384, reasoning field",
+      "id": "tests_test_overrides_rationale_34"
+    },
+    {
+      "label": "Unknown model passes through without extra fields.",
+      "file_type": "rationale",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L57",
+      "community": 2,
+      "norm_label": "unknown model passes through without extra fields.",
+      "id": "tests_test_overrides_rationale_57"
+    },
+    {
+      "label": "Upstream URL preserves /v1 (no double /v1/v1).",
+      "file_type": "rationale",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L76",
+      "community": 2,
+      "norm_label": "upstream url preserves /v1 (no double /v1/v1).",
+      "id": "tests_test_overrides_rationale_76"
+    },
+    {
+      "label": "When incoming max_tokens < override, override value used.",
+      "file_type": "rationale",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L88",
+      "community": 2,
+      "norm_label": "when incoming max_tokens < override, override value used.",
+      "id": "tests_test_overrides_rationale_88"
+    },
+    {
+      "label": "AGENTS.md",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "community": 5,
+      "norm_label": "agents.md",
+      "id": "agents"
+    },
+    {
+      "label": "graphify",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "community": 5,
+      "norm_label": "graphify",
+      "id": "agents_graphify"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "community": 1,
+      "norm_label": "readme.md",
+      "id": "readme"
+    },
+    {
+      "label": "scubamount-nim-proxy",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "community": 1,
+      "norm_label": "scubamount-nim-proxy",
+      "id": "readme_scubamount_nim_proxy"
+    },
+    {
+      "label": "Install",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "community": 1,
+      "norm_label": "install",
+      "id": "readme_install"
+    },
+    {
+      "label": "Auth",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L13",
+      "community": 1,
+      "norm_label": "auth",
+      "id": "readme_auth"
+    },
+    {
+      "label": "Run",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L23",
+      "community": 1,
+      "norm_label": "run",
+      "id": "readme_run"
+    },
+    {
+      "label": "Configure overrides",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L31",
+      "community": 1,
+      "norm_label": "configure overrides",
+      "id": "readme_configure_overrides"
+    },
+    {
+      "label": "Override schema",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L44",
+      "community": 1,
+      "norm_label": "override schema",
+      "id": "readme_override_schema"
+    },
+    {
+      "label": "Use with any OpenAI-compatible client",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L56",
+      "community": 1,
+      "norm_label": "use with any openai-compatible client",
+      "id": "readme_use_with_any_openai_compatible_client"
+    },
+    {
+      "label": "Opencode",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L66",
+      "community": 1,
+      "norm_label": "opencode",
+      "id": "readme_opencode"
+    },
+    {
+      "label": "Update",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L87",
+      "community": 1,
+      "norm_label": "update",
+      "id": "readme_update"
+    },
+    {
+      "label": "Uninstall",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L95",
+      "community": 1,
+      "norm_label": "uninstall",
+      "id": "readme_uninstall"
+    },
+    {
+      "label": "License",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L123",
+      "community": 1,
+      "norm_label": "license",
+      "id": "readme_license"
+    },
+    {
+      "label": "Knowledge Graph",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 13,
+      "norm_label": "knowledge graph",
+      "id": "knowledge_graph"
+    },
+    {
+      "label": "nim_proxy",
+      "file_type": "code",
+      "source_file": "nim_proxy/overrides.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 14,
+      "norm_label": "nim_proxy",
+      "id": "nim_proxy"
+    },
+    {
+      "label": "OpenCode JSON",
+      "file_type": "document",
+      "source_file": "examples/opencode.json.snippet",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 15,
+      "norm_label": "opencode json",
+      "id": "opencode_json"
+    },
+    {
+      "label": "GRAPH_REPORT.md",
+      "file_type": "document",
+      "source_file": "nim_proxy/GRAPH_REPORT.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 12,
+      "norm_label": "graph_report.md",
+      "id": "graph_report_md"
+    },
+    {
+      "label": "Project Layout",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 1,
+      "norm_label": "project layout",
+      "id": "project_layout"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".opencode/opencode.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "opencode_opencode",
+      "target": "opencode_opencode_plugin"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".opencode/plugins/graphify.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "plugins_graphify",
+      "target": "plugins_graphify_graphifyplugin"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides",
+      "target": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides",
+      "target": "examples_overrides_stepfun_ai_step_3_7_flash"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b",
+      "target": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b_extra_body"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b",
+      "target": "examples_overrides_stepfun_ai_step_3_7_flash_max_tokens"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b",
+      "target": "examples_overrides_stepfun_ai_step_3_7_flash_temperature"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b",
+      "target": "examples_overrides_stepfun_ai_step_3_7_flash_top_p"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b_extra_body",
+      "target": "examples_overrides_extra_body_chat_template_kwargs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides_nvidia_nemotron_3_ultra_550b_a55b_extra_body",
+      "target": "examples_overrides_extra_body_reasoning_budget"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides_extra_body_chat_template_kwargs",
+      "target": "examples_overrides_chat_template_kwargs_enable_thinking"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides_stepfun_ai_step_3_7_flash",
+      "target": "examples_overrides_stepfun_ai_step_3_7_flash_max_tokens"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides_stepfun_ai_step_3_7_flash",
+      "target": "examples_overrides_stepfun_ai_step_3_7_flash_temperature"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "examples/overrides.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "examples_overrides_stepfun_ai_step_3_7_flash",
+      "target": "examples_overrides_stepfun_ai_step_3_7_flash_top_p"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/__init__.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_init",
+      "target": "nim_proxy_app"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/__init__.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_init",
+      "target": "nim_proxy_app_apply_override"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/__init__.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_init",
+      "target": "nim_proxy_config"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/__init__.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_init",
+      "target": "nim_proxy_config_load_overrides"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_init_rationale_1",
+      "target": "nim_proxy_init"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/__main__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_main",
+      "target": "nim_proxy_app"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/__main__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_main",
+      "target": "nim_proxy_app_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_app",
+      "target": "nim_proxy_app_apply_override"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_app",
+      "target": "nim_proxy_app_catch_all"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_app",
+      "target": "nim_proxy_app_main"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_app",
+      "target": "nim_proxy_config"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_app",
+      "target": "nim_proxy_config_load_overrides"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_app_rationale_1",
+      "target": "nim_proxy_app"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides",
+      "target": "nim_proxy_app"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_app_apply_override",
+      "target": "nim_proxy_config_load_overrides"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L67",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_app_catch_all",
+      "target": "nim_proxy_app_apply_override"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_app_catch_all",
+      "target": "request"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_app_catch_all",
+      "target": "str"
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/app.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_app_catch_all",
+      "target": "streamingresponse"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/config.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_config",
+      "target": "nim_proxy_config_load_overrides"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/config.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_config_rationale_1",
+      "target": "nim_proxy_config"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides",
+      "target": "nim_proxy_config"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/config.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_config_rationale_20",
+      "target": "nim_proxy_config_load_overrides"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides",
+      "target": "nim_proxy_config_load_overrides"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "nim_proxy/overrides.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "nim_proxy_overrides_rationale_1",
+      "target": "nim_proxy_overrides"
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/autolaunch.sh",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_autolaunch",
+      "target": "scripts_autolaunch_install_plist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/autolaunch.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_autolaunch",
+      "target": "users_andrew_code_scubamount_nim_proxy_scripts_autolaunch_sh__entry"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/autolaunch.sh",
+      "source_location": "L35",
+      "weight": 1.0,
+      "context": "call",
+      "confidence_score": 1.0,
+      "source": "users_andrew_code_scubamount_nim_proxy_scripts_autolaunch_sh__entry",
+      "target": "scripts_autolaunch_install_plist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/install.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_install",
+      "target": "users_andrew_code_scubamount_nim_proxy_scripts_install_sh__entry"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/restart.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_restart",
+      "target": "users_andrew_code_scubamount_nim_proxy_scripts_restart_sh__entry"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/update.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_update",
+      "target": "users_andrew_code_scubamount_nim_proxy_scripts_update_sh__entry"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides",
+      "target": "tests_test_overrides_capture_post"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides",
+      "target": "tests_test_overrides_test_default_override_applied"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides",
+      "target": "tests_test_overrides_test_max_tokens_cap_override_wins"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides",
+      "target": "tests_test_overrides_test_max_tokens_incoming_wins"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides",
+      "target": "tests_test_overrides_test_no_override_unknown_model"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides",
+      "target": "tests_test_overrides_test_path_rewrite"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_rationale_1",
+      "target": "tests_test_overrides"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_rationale_22",
+      "target": "tests_test_overrides_capture_post"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_test_default_override_applied",
+      "target": "tests_test_overrides_capture_post"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_test_max_tokens_cap_override_wins",
+      "target": "tests_test_overrides_capture_post"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_test_max_tokens_incoming_wins",
+      "target": "tests_test_overrides_capture_post"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_test_no_override_unknown_model",
+      "target": "tests_test_overrides_capture_post"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_test_path_rewrite",
+      "target": "tests_test_overrides_capture_post"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_rationale_34",
+      "target": "tests_test_overrides_test_default_override_applied"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_rationale_57",
+      "target": "tests_test_overrides_test_no_override_unknown_model"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_rationale_76",
+      "target": "tests_test_overrides_test_path_rewrite"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_rationale_88",
+      "target": "tests_test_overrides_test_max_tokens_cap_override_wins"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_overrides.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_overrides_rationale_88",
+      "target": "tests_test_overrides_test_max_tokens_incoming_wins"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "agents",
+      "target": "agents_graphify"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme",
+      "target": "readme_scubamount_nim_proxy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L102",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_scubamount_nim_proxy",
+      "target": "project_layout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_scubamount_nim_proxy",
+      "target": "readme_auth"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_scubamount_nim_proxy",
+      "target": "readme_configure_overrides"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_scubamount_nim_proxy",
+      "target": "readme_install"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L123",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_scubamount_nim_proxy",
+      "target": "readme_license"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L66",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_scubamount_nim_proxy",
+      "target": "readme_opencode"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_scubamount_nim_proxy",
+      "target": "readme_run"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L95",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_scubamount_nim_proxy",
+      "target": "readme_uninstall"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L87",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_scubamount_nim_proxy",
+      "target": "readme_update"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L56",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_scubamount_nim_proxy",
+      "target": "readme_use_with_any_openai_compatible_client"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L44",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_configure_overrides",
+      "target": "readme_override_schema"
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "7d62f0a268e089c8d97dab9cd8985e9ec9458559"
+}
