@@ -7,7 +7,7 @@ from typing import AsyncIterator
 
 import httpx
 from fastapi import FastAPI, Request
-from fastapi.responses import StreamingResponse
+from fastapi.responses import Response, StreamingResponse
 
 from .config import LISTEN_HOST, LISTEN_PORT, NIM_API_KEY, NIM_BASE, load_overrides
 
@@ -36,9 +36,13 @@ def _apply_override(body: dict) -> dict:
 
 
 @app.api_route(
-    "/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"]
+    "/{path:path}",
+    methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+    response_model=None,
 )
-async def catch_all(request: Request, path: str) -> StreamingResponse:
+async def catch_all(
+    request: Request, path: str
+):
     if path.startswith("v1/"):
         upstream_path = path[3:]
     else:
@@ -74,7 +78,7 @@ async def catch_all(request: Request, path: str) -> StreamingResponse:
         flush=True,
     )
 
-    async def _forward() -> AsyncIterator[bytes]:
+    async def _stream() -> AsyncIterator[bytes]:
         async with httpx.AsyncClient(timeout=httpx.Timeout(600.0)) as client:
             async with client.stream(
                 "POST",
@@ -88,11 +92,39 @@ async def catch_all(request: Request, path: str) -> StreamingResponse:
                         f"[nim-proxy] NIM {resp.status_code} body: {txt[:500]}",
                         flush=True,
                     )
-                resp.raise_for_status()
+                    return
                 async for chunk in resp.aiter_bytes():
                     yield chunk
 
-    return StreamingResponse(_forward(), media_type="text/event-stream")
+    async def _peek() -> tuple[int, bytes, dict]:
+        async with httpx.AsyncClient(timeout=httpx.Timeout(600.0)) as client:
+            resp = await client.send(
+                client.build_request(
+                    "POST",
+                    url,
+                    json=body,
+                    headers={**headers, "Content-Type": "application/json"},
+                ),
+                stream=True,
+            )
+            if resp.status_code != 200:
+                body_bytes = await resp.aread()
+                print(
+                    f"[nim-proxy] NIM {resp.status_code} body: {body_bytes[:500]}",
+                    flush=True,
+                )
+                return resp.status_code, body_bytes, dict(resp.headers)
+            return resp.status_code, b"", dict(resp.headers)
+
+    status, err_body, resp_headers = await _peek()
+    if status != 200:
+        return Response(
+            content=err_body,
+            status_code=status,
+            media_type=resp_headers.get("content-type", "application/json"),
+        )
+
+    return StreamingResponse(_stream(), media_type="text/event-stream")
 
 
 def main() -> None:
