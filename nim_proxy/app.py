@@ -21,6 +21,8 @@ def _apply_override(body: dict) -> dict:
     if not override:
         return body
 
+    if "upstream" in override:
+        body["model"] = override["upstream"]
     if "temperature" in override:
         body["temperature"] = override["temperature"]
     if "top_p" in override:

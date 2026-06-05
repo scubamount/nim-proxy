@@ -38,4 +38,16 @@ MODEL_OVERRIDES: dict = {
             "chat_template_kwargs": {"enable_thinking": True},
         },
     },
+    "minimaxai/minimax-m2.7": {
+        "upstream": "minimaxai/minimax-m2.7",
+        "temperature": 1,
+        "top_p": 0.95,
+        "max_tokens": 8192,
+    },
+    "nvidia/minimaxai/minimax-m2.7": {
+        "upstream": "minimaxai/minimax-m2.7",
+        "temperature": 1,
+        "top_p": 0.95,
+        "max_tokens": 8192,
+    },
 }
