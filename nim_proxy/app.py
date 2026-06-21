@@ -77,8 +77,16 @@ async def catch_all(
 
     url = f"{NIM_BASE}/{upstream_path}"
 
-    auth = request.headers.get("authorization") or (
-        f"Bearer {NIM_API_KEY}" if NIM_API_KEY else ""
+    # SECURITY: always inject the proxy's own NVIDIA key and IGNORE any client-supplied
+    # Authorization header. Downstream callers (hindsight daemon via litellm, opencode,
+    # etc.) therefore never need to hold the real credential — they send a dummy/no key
+    # and this proxy is the single place the secret lives (sourced from ~/.hermes/.env at
+    # startup by scripts/launch-with-key.sh). Previously this fell back to the client key
+    # when present, which forced callers to embed the real nvapi key in their configs
+    # (plaintext-at-rest, SOC2/ISO27001 finding) and caused 401s when a caller sent a
+    # placeholder. Server-side injection is both more secure and more robust.
+    auth = f"Bearer {NIM_API_KEY}" if NIM_API_KEY else (
+        request.headers.get("authorization") or ""
     )
     headers = {"Authorization": auth} if auth else {}
 
