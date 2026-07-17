@@ -1,0 +1,18 @@
+{
+  "_comment": "Editable allowlist for the NIM tier auto-ranker. Andrew edits this; no code change needed. `models` is the curated probe set (do NOT dump the full ~100-model catalog here — probes cost money+time). Each op-class alias maps to the candidates eligible for it; the ranker probes only these against the live /v1/models catalog and picks the fastest that PASSES the fidelity gate.",
+  "proxy_base": "http://127.0.0.1:8001/v1",
+  "overrides_path": "~/.config/nim-proxy-overrides.json",
+  "audit_log": "~/.config/nim-proxy-ranker.log",
+  "probe_samples": 3,
+  "probe_timeout_s": 12,
+  "aliases": {
+    "auto/retain": ["openai/gpt-oss-20b", "meta/llama-4-maverick-17b-128e-instruct", "nvidia/nemotron-3-nano-30b-a3b-instruct"],
+    "auto/consolidation": ["openai/gpt-oss-20b", "meta/llama-4-maverick-17b-128e-instruct"],
+    "auto/reflect": ["openai/gpt-oss-20b", "meta/llama-4-maverick-17b-128e-instruct"]
+  },
+  "op_class": {
+    "auto/retain": "retain",
+    "auto/consolidation": "consolidation",
+    "auto/reflect": "retain"
+  }
+}
