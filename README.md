@@ -79,6 +79,33 @@ NIM_PROXY_OVERRIDES=examples/overrides-thinking.json python3.12 -m uvicorn nim_p
 
 If your request includes `max_tokens` and the override includes `max_tokens`, the larger of the two wins.
 
+## Auto-ranker: self-healing `auto/*` aliases
+
+An hourly job (`auto_ranker/probe.py`, launchd `com.scubamount.nim-ranker`) keeps a set
+of alias models pointed at the best NIM model that is actually up right now.
+
+- Aliases: `auto/retain`, `auto/consolidation`, `auto/reflect`. A client asking for
+  `auto/retain` is forwarded to whichever model currently wins.
+- **Fidelity gate first, latency second.** A candidate must return non-empty
+  `content` that parses as JSON in the expected shape. This rejects reasoning models
+  (empty `content`) and `response_format` ignorers (e.g. `mistral-small-4`) that a
+  pure latency rank would wrongly pick. Survivors are ranked by p50 latency.
+- **Restart-free.** The winner is written to the overrides JSON (`$NIM_PROXY_OVERRIDES`),
+  which the proxy reads fresh per request. A model going down or a faster one appearing
+  self-heals on the next hourly run — no restart, no client config change.
+- If **no** candidate passes, the last-good alias is kept (never blanked) and a CRITICAL
+  line is logged.
+
+Config (editable, no code change): `auto_ranker/candidates.json` — allowlist per alias,
+probe timeout, samples. Audit log: `~/.config/nim-proxy-ranker.log` (JSONL, one run per line).
+
+```bash
+./scripts/install-ranker.sh                              # one-time: seed JSON, wire plist, load job
+env -u PYTHONPATH .venv/bin/python -m auto_ranker.probe --dry-run   # probe+rank, write nothing
+```
+
+Point a client (e.g. hindsight) at `auto/retain` once and leave it — routing lives here now.
+
 ## Use with any OpenAI-compatible client
 
 Point your client at:
