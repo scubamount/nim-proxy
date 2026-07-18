@@ -166,7 +166,7 @@ def probe_model(
             "model": model,
             "messages": messages,
             "response_format": {"type": "json_object"},
-            "max_tokens": 512,
+            "max_tokens": 4096,  # ponytail: reasoning models burn budget before JSON; 512 starved gpt-oss (empty content, finish=length). Raise if a model needs more headroom.
             "temperature": 0,
             "stream": False,
         }
