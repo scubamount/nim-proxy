@@ -58,7 +58,17 @@ else
 fi
 
 echo "==> 4. Install hourly ranker job"
-cp "$RANKER_PLIST_SRC" "$RANKER_PLIST_DST"
+# Render deployment-specific paths locally; the checked-in plist is a template.
+"$PY" - "$RANKER_PLIST_SRC" "$RANKER_PLIST_DST" "$PY" "$REPO" <<'PLISTPY'
+import plistlib, sys
+src, dst, python, repo = sys.argv[1:]
+with open(src, 'rb') as f:
+    data = plistlib.load(f)
+data['ProgramArguments'][0] = python
+data['WorkingDirectory'] = repo
+with open(dst, 'wb') as f:
+    plistlib.dump(data, f)
+PLISTPY
 launchctl unload "$RANKER_PLIST_DST" 2>/dev/null || true
 launchctl load "$RANKER_PLIST_DST"
 echo "    loaded com.scubamount.nim-ranker (hourly)"

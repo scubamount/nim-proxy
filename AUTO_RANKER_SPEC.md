@@ -35,9 +35,9 @@ allowlist (do NOT probe all ~100 — costs money + time). Start allowlist:
 - openai/gpt-oss-20b            (known-good fallback, current primary)
 - meta/llama-4-maverick-17b-128e-instruct   (known-good when up)
 - nvidia/nemotron-3-* (NON-reasoning variants only)
-- Any new fast instruct models Andrew adds to the allowlist file
+- Any new fast instruct models the maintainer adds to the allowlist file
 
-Allowlist lives in a config file (`auto_ranker/candidates.json`) so Andrew edits it without
+Allowlist lives in a config file (`auto_ranker/candidates.json`) so the maintainer edits it without
 touching code.
 
 ## Ranking

@@ -6,12 +6,12 @@
   <string>com.scubamount.nim-ranker</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/andrew/code/scubamount-nim-proxy/.venv/bin/python</string>
+    <string>__VENV_PY__</string>
     <string>-m</string>
     <string>auto_ranker.probe</string>
   </array>
   <key>WorkingDirectory</key>
-  <string>/Users/andrew/code/scubamount-nim-proxy</string>
+  <string>__PROXY_DIR__</string>
   <key>EnvironmentVariables</key>
   <dict>
     <key>PATH</key>

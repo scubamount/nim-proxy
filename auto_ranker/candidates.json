@@ -1,5 +1,5 @@
 {
-  "_comment": "Editable allowlist for the NIM tier auto-ranker. Andrew edits this; no code change needed. `models` is the curated probe set (do NOT dump the full ~100-model catalog here — probes cost money+time). Each op-class alias maps to the candidates eligible for it; the ranker probes only these against the live /v1/models catalog and picks the fastest that PASSES the fidelity gate.",
+  "_comment": "Editable allowlist for the NIM tier auto-ranker. the maintainer edits this; no code change needed. `models` is the curated probe set (do NOT dump the full ~100-model catalog here — probes cost money+time). Each op-class alias maps to the candidates eligible for it; the ranker probes only these against the live /v1/models catalog and picks the fastest that PASSES the fidelity gate.",
   "proxy_base": "http://127.0.0.1:8001/v1",
   "overrides_path": "~/.config/nim-proxy-overrides.json",
   "audit_log": "~/.config/nim-proxy-ranker.log",

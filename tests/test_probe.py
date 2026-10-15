@@ -37,7 +37,7 @@ def test_none_content_rejected():
 
 
 def test_valid_json_object_passes():
-    passed, reason = probe.check_fidelity(_resp('{"facts": ["Andrew dives"]}'), "retain")
+    passed, reason = probe.check_fidelity(_resp('{"facts": ["A diver dives"]}'), "retain")
     assert passed and reason == "ok"
 
 
